@@ -86,6 +86,8 @@ extern int     solver_nconflicts(solver* s);
 
 extern void    solver_setnvars(solver* s,int n);
 
+#define MAX_TRACKED_SOLUTIONS 1000000
+
 struct stats_t
 {
     uint64   starts, decisions, propagations, inspects, conflicts;
@@ -98,7 +100,14 @@ struct stats_t
 
     clock_t     clk;
 
+    // snapshots of stats between finding each new solution 
+    uint64* snap_decisions;
+    uint64* snap_propagations;
+    uint64* snap_inspects;
+    uint64* snap_conflicts;
+    uint64  recorded_solutions;
 };
+
 typedef struct stats_t stats;
 
 //=================================================================================================
