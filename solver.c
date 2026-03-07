@@ -1500,6 +1500,13 @@ void solver_delete(solver* s)
         free(s->tags     );
     }
 
+    // --- NEW DEALLOCATION BLOCK ---
+    if (s->stats.snap_decisions)    free(s->stats.snap_decisions);
+    if (s->stats.snap_propagations) free(s->stats.snap_propagations);
+    if (s->stats.snap_inspects)     free(s->stats.snap_inspects);
+    if (s->stats.snap_conflicts)    free(s->stats.snap_conflicts);
+    // ------------------------------
+
     free(s);
 }
 
