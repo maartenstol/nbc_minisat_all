@@ -219,8 +219,9 @@ static void SIGINT_handler(int signum)
 static inline void PRINT_USAGE(char *p)
 {
     printf("Usage:\t%s [options] input-file [output-file]\n", (p));
+    printf("Options:\n");
+    printf("  -s <file>\tWrite per-solution snapshot metrics to <file> as CSV\n");
 }
-
 
 int main(int argc, char** argv)
 {
