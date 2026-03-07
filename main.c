@@ -255,6 +255,7 @@ int main(int argc, char** argv)
 
     char *infile  = NULL;
     char *outfile = NULL;
+    char *statsfile = NULL; // --- NEW VARIABLE ---
     int  lim, span;
 
     /*** RECEIVE INPUTS ***/
@@ -265,6 +266,15 @@ int main(int argc, char** argv)
           if (infile == NULL)       { infile  = ""; }
           else if (outfile == NULL) { outfile = ""; }
           break;
+        // --- NEW ARGUMENT PARSING BLOCK ---
+        case 's':
+          if (i + 1 < argc) {
+              statsfile = argv[++i];
+          } else {
+              PRINT_USAGE(argv[0]); return 0;
+          }
+          break;
+        // ----------------------------------
         case '?': case 'h': default:
           PRINT_USAGE(argv[0]); return  0;
 	case 'V':
@@ -317,6 +327,12 @@ int main(int argc, char** argv)
 	} else {
     	printStats(&s->stats, clock() - s->stats.clk, false);
 	}
+
+    // --- NEW WRITE TRIGGER ---
+    if (statsfile != NULL) {
+        dumpStatsCsv(&s->stats, statsfile);
+    }
+    // -------------------------
 
     solver_delete(s);
     return 0;
