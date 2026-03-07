@@ -1434,6 +1434,14 @@ solver* solver_new(void)
     s->stats.max_literals     = 0;
     s->stats.tot_literals     = 0;
 
+    // --- NEW ALLOCATION BLOCK ---
+    s->stats.snap_decisions    = (uint64*)malloc(sizeof(uint64) * MAX_TRACKED_SOLUTIONS);
+    s->stats.snap_propagations = (uint64*)malloc(sizeof(uint64) * MAX_TRACKED_SOLUTIONS);
+    s->stats.snap_inspects     = (uint64*)malloc(sizeof(uint64) * MAX_TRACKED_SOLUTIONS);
+    s->stats.snap_conflicts    = (uint64*)malloc(sizeof(uint64) * MAX_TRACKED_SOLUTIONS);
+    s->stats.recorded_solutions = 0;
+    // ----------------------------
+
 #ifdef GMP
     mpz_init(s->stats.tot_solutions);
     mpz_set_ui(s->stats.tot_solutions, 0);
