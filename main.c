@@ -223,6 +223,28 @@ static inline void PRINT_USAGE(char *p)
     printf("  -s <file>\tWrite per-solution snapshot metrics to <file> as CSV\n");
 }
 
+void dumpStatsCsv(stats* s_stats, const char* filepath) {
+    if (filepath == NULL || filepath[0] == '\0') return;
+    
+    FILE* f = fopen(filepath, "w");
+    if (f == NULL) {
+        warn("ERROR! Could not open stats file for writing: %s\n", filepath);
+        return;
+    }
+    
+    fprintf(f, "solution_index,conflicts,decisions,propagations,inspects\n");
+    for (uint64 i = 0; i < s_stats->recorded_solutions; i++) {
+        fprintf(f, "%llu,%llu,%llu,%llu,%llu\n",
+            (unsigned long long)i,
+            (unsigned long long)s_stats->snap_conflicts[i],
+            (unsigned long long)s_stats->snap_decisions[i],
+            (unsigned long long)s_stats->snap_propagations[i],
+            (unsigned long long)s_stats->snap_inspects[i]);
+    }
+    
+    fclose(f);
+}
+
 int main(int argc, char** argv)
 {
     solver* s = solver_new();
