@@ -1342,6 +1342,20 @@ static lbool solver_search(solver* s, int nof_conflicts, int nof_learnts)
 
             if (next == var_Undef){
                 solver_inc_totsol(s);
+
+                // --- NEW SNAPSHOT BLOCK ---
+                if (s->stats.recorded_solutions < MAX_TRACKED_SOLUTIONS) {
+                    s->stats.snap_decisions[s->stats.recorded_solutions]    = s->stats.decisions;
+                    s->stats.snap_propagations[s->stats.recorded_solutions] = s->stats.propagations;
+                    s->stats.snap_inspects[s->stats.recorded_solutions]     = s->stats.inspects;
+                    s->stats.snap_conflicts[s->stats.recorded_solutions]    = s->stats.conflicts;
+                    s->stats.recorded_solutions++;
+                } else {
+                    // Maximum tracked solutions reached. Trigger clean abort.
+                    eflag = 1;
+                }
+                // --------------------------   
+                 
 #ifdef VERBOSEDEBUG
                 diag(L_IND"**MODEL**\n", L_ind);
 #endif
